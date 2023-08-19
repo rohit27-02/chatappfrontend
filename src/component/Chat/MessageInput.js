@@ -23,10 +23,10 @@ const MessageInput = () => {
 
 
   return (
-    <section className="flex w-full h-16 justify-center gap-10 items-center px-10 text-dark   bg-white-dark border-2 ">
+    <section className="flex w-full h-20 justify-center drop-shadow-sm gap-10 items-center px-10 text-dark bg-white-dark  ">
 
       <form >
-        <input onKeyDown={handleKeyPress} className='w-[40vmax] p-2 outline-none caret-transparent border-2 rounded-lg focus:border-green-dark' value={inputMessage} onChange={(e) => setInputMessage(e.currentTarget.value)} type='text' placeholder='send message' />
+        <input onKeyDown={handleKeyPress} className='w-[40vmax] p-2 outline-none caret-transparent border-2 border-green-light rounded-lg focus:border-green-dark' value={inputMessage} onChange={(e) => setInputMessage(e.currentTarget.value)} type='text' placeholder='send message' />
       </form>
       <button className='w-10 h-10 object-contain cursor-pointer' onClick={handleSubmit}>
         <img src='/send-button.png' alt='send-button'/>
