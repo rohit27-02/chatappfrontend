@@ -26,6 +26,7 @@ const MessageInput = () => {
 
 
   return (
+
     <section className="flex w-full h-20 justify-center gap-10 items-center px-10 text-dark   bg-white-dark border-2 ">
 
     <style>
@@ -38,6 +39,8 @@ const MessageInput = () => {
       <form className=' p-2 flex justify-between items-center w-[50vmax] bg-white-light  outline-none  border-2 rounded-lg group-focus:border-green-dark'>
         <input onKeyDown={handleKeyPress} className='w-[40vmax] p-2 outline-none group  ' value={inputMessage} onChange={(e) => setInputMessage(e.currentTarget.value)} type='text' placeholder='send message' />
         <button className='w-10 h-10 object-contain cursor-pointer pr-2' onClick={handleSubmit}>
+
+   
         <img src='/send-button.png' alt='send-button'/>
       </button>
       </form>
