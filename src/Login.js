@@ -1,23 +1,31 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = { username, password }
     try {
-      fetch(`${process.env.REACT_APP_URL}/api/login`, {
+      const res = await fetch(`${process.env.REACT_APP_URL}/api/login`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
-      }).then((res) => res.json()).then((data) => {
-        localStorage.setItem("token", data.token);
-      });
+      })
+
+      const resdata = await res.json();
+      if(res.status === 200){
+        localStorage.setItem("token", resdata.token);
+        navigate("/")
+      }
+
     } catch (error) {
       window.alert(error)
     }
