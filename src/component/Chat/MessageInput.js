@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import api from '../../api/sendMessage';
-
-
 
 const MessageInput = () => {
   const [inputMessage, setInputMessage] = useState('');
@@ -12,8 +10,8 @@ const MessageInput = () => {
       e.preventDefault(); // Prevent form submission
 
     if (inputMessage.trim() !== '') {
-      // e.preventDefault(); // Prevent form submission
-      api.sendMessage(inputMessage);
+      e.preventDefault(); // Prevent form submission
+      api.sendMessage({message:inputMessage,token:localStorage.getItem("token")});
       setInputMessage('');
     }
   }

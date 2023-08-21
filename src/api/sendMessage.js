@@ -1,16 +1,20 @@
-import io from 'socket.io-client';
-
-const socket = io(process.env.REACT_APP_URL)
+import socket from "../middleware/socket";
 
 const api = {
-    sendMessage: (message) => {
-      socket.emit('chat message', message);
-    },
-    onMessageReceived: (callback) => {
-      socket.on('chat message', (message) => {
-        callback(message);
-      });
-    },
-  };
-  
-  export default api;
+  sendPrivateMessage: ({ message, userID }) => {
+    socket.emit("private message", {
+      content: message,
+      to: userID,
+    })
+  },
+  sendMessage: ({ message, token }) => {
+    socket.emit('chat message', { message: message, token: token });
+  },
+  onMessageReceived: (callback) => {
+    socket.on('chat message', (message) => {
+      callback(message);
+    });
+  },
+};
+
+export default api;
