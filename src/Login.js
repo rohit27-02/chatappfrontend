@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import socket from './middleware/socket';
 
 const Login = () => {
   const [username, setusername] = useState("");
@@ -21,8 +22,30 @@ const Login = () => {
       })
 
       const resdata = await res.json();
-      if(res.status === 200){
+      if (res.status === 200) {
         localStorage.setItem("token", resdata.token);
+        localStorage.setItem("username", resdata.username);
+        if (resdata.token) {
+          socket.auth = { token: resdata.token, username: resdata.username };
+          socket.connect();
+        }
+        socket.on("session", ({ sessionID, userID }) => {
+          // attach the session ID to the next reconnection attempts
+          socket.auth = { sessionID };
+          // store it in the localStorage
+          localStorage.setItem("sessionID", sessionID);
+          // save the ID of the user
+          socket.userID = userID;
+        });
+
+        socket.on("connect_error", (err) => {
+          if (err.message === "invalid username") {
+            // Handle invalid username error
+          }
+        });
+        socket.on("connect", () => {
+          console.log("Connected to the socket");
+        });
         navigate("/")
       }
 
@@ -42,12 +65,12 @@ const Login = () => {
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
               <div>
-                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
-                <input onChange={(e)=>setusername(e.currentTarget.value)} type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 1:bg-gray-700 1:border-gray-600 1:placeholder-gray-400  1:focus:ring-blue-500 1:focus:border-blue-500" placeholder="name@company.com" required="" />
+                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 ">username</label>
+                <input onChange={(e) => setusername(e.currentTarget.value)} type="text" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 1:bg-gray-700 1:border-gray-600 1:placeholder-gray-400  1:focus:ring-blue-500 1:focus:border-blue-500" placeholder="name@company.com" required="" />
               </div>
               <div>
                 <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
-                <input onChange={(e)=>setpassword(e.currentTarget.value)} type="password" name="password" id="password" placeholder="password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 1:bg-gray-700 1:border-gray-600 1:placeholder-gray-400  1:focus:ring-blue-500 1:focus:border-blue-500" required="" />
+                <input onChange={(e) => setpassword(e.currentTarget.value)} type="password" name="password" id="password" placeholder="password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 1:bg-gray-700 1:border-gray-600 1:placeholder-gray-400  1:focus:ring-blue-500 1:focus:border-blue-500" required="" />
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
