@@ -23,30 +23,14 @@ const Register = () => {
       })
 
       const resdata = await res.json();
-      if (res.status === 200) {
+      if (res.status === 201) {
         localStorage.setItem("token", resdata.token);
         localStorage.setItem("username", resdata.username);
         if (resdata.token) {
           socket.auth = { token: resdata.token, username: resdata.username };
           socket.connect();
         }
-        socket.on("session", ({ sessionID, userID }) => {
-          // attach the session ID to the next reconnection attempts
-          socket.auth = { sessionID };
-          // store it in the localStorage
-          localStorage.setItem("sessionID", sessionID);
-          // save the ID of the user
-          socket.userID = userID;
-        });
-
-        socket.on("connect_error", (err) => {
-          if (err.message === "invalid username") {
-            // Handle invalid username error
-          }
-        });
-        socket.on("connect", () => {
-          console.log("Connected to the socket");
-        });
+       
         navigate("/")
       }
 

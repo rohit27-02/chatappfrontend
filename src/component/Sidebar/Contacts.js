@@ -1,17 +1,28 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Contactcard from './Contactcard';
+import {useQuery} from "@tanstack/react-query";
 
 const Contacts = () => {
-  const [ContactArr, setContactArr] = useState([1,2 ,3]);
+  const { isLoading, error, data } = useQuery(
+   { queryKey: ['friendlist'],
+     queryFn: () =>
+    fetch("http://localhost:3001/api/friends/1").then(res =>
+      res.json()
+    )}
+  )
+
+  if (isLoading) return 'Loading...'
+
+  if (error) return 'An error has occurred: ' + error.message
   return (
-    
- <div className='flex flex-col gap-2 p-4'>
-   {
-      ContactArr.map((item)=>(
-        <Contactcard id={item}/>
-      ))
-    }
-</div>
+
+    <div className='flex overflow-y-scroll h-screen flex-col gap-2 p-4'>
+      {
+        data?.users.map((item) => (
+          <Contactcard contact={item} />
+        ))
+      }
+    </div>
   )
 }
 

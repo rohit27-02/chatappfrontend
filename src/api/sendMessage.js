@@ -1,17 +1,17 @@
 import socket from "../middleware/socket";
 
 const api = {
-  sendPrivateMessage: ({ message, userID }) => {
+  sendPrivateMessage: ({ message, userId }) => {
     socket.emit("private message", {
       content: message,
-      to: userID,
-    })
+      to: userId,
+    });
   },
   sendMessage: ({ message, token }) => {
     socket.emit('chat message', { message: message, token: token });
   },
   onMessageReceived: (callback) => {
-    socket.on('chat message', (message) => {
+    socket.on("private message", (message) => {
       callback(message);
     });
   },
