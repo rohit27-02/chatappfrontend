@@ -6,7 +6,7 @@ const Contacts = () => {
   const { isLoading, error, data } = useQuery(
    { queryKey: ['friendlist'],
      queryFn: () =>
-    fetch("http://localhost:3001/api/friends/1").then(res =>
+    fetch(`${process.env.REACT_APP_URL}/api/friends/1`).then(res =>
       res.json()
     )}
   )

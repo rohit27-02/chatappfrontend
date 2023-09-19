@@ -17,7 +17,7 @@ const Messagedisplay = () => {
   const { data } = useQuery({
     queryKey: ['chatf', userSelected._id],
     queryFn: () =>
-      fetch(`http://localhost:3001/api/chats/${userSelected._id}`, {
+      fetch(`${process.env.REACT_APP_URL}/api/chats/${userSelected._id}`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
           'Content-Type': 'application/json',
